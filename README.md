@@ -3,7 +3,7 @@ This is a project done for (|MCTR 1010|) Image processing for Mechatronics cours
 Emails of project members:  
 1) Ahmed Yasser: ahmedys2010@gmail.com
 2) Youssef Tamer: eng.yousseftamer2001@gmail.com
-3) Dina: dina67724@gmail.com
+3) Dina Mohamed: dina67724@gmail.com
 4) Ahmed Sleem: ahmedsleem.mail@gmail.com
 5) Marwa Lotfy: marwalotfy410@gmail.com
 
