@@ -1,6 +1,6 @@
-import numpy as np
-import time
 import cv2
+import numpy as np
+
 aruco_lib = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
 	"DICT_4X4_100": cv2.aruco.DICT_4X4_100,
@@ -25,9 +25,7 @@ aruco_lib = {
 	"DICT_APRILTAG_36h11": cv2.aruco.DICT_APRILTAG_36h11
 }
 
-aruco_type = "DICT_7X7_250"
-
-def detectAruco(img):
+def detectAruco(img, aruco_type):
     arucoDict = cv2.aruco.Dictionary_get(aruco_lib[aruco_type])
     arucoParam = cv2.aruco.DetectorParameters_create()
     corners, ids, rej = cv2.aruco.detectMarkers(img, 
@@ -38,7 +36,7 @@ def detectAruco(img):
     #print(rej)
     return [corners, ids, rej]
 
-def displayAruco(img, corners, ids, rejected):
+def displayAruco(img, corners, ids, rejected, aruco_type):
     cx = 0
     cy = 0
     topLeft = 0
@@ -76,21 +74,3 @@ def displayAruco(img, corners, ids, rejected):
 						0.5, (0, 255, 0), 2)
             print("[Inference] ArUco marker ID: {}".format(ID))
     return [(cx, cy), topLeft, topRight, botRight, botLeft]
-            
-
-def main():
-    cap = cv2.VideoCapture(0)
-    while (1):
-        ret, img = cap.read()
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        [corners, ids, rejected] = detectAruco(img)
-        [center, topLeft, topRight, botRight, botLeft] = displayAruco(img, corners, ids, rejected)
-        cv2.imshow("image", img)
-        if(cv2.waitKey(1)&0xFF==27):
-            break
-    cap.release()
-    cv2.destroyAllWindows()
-    
-
-if __name__ == "__main__":
-    main()
