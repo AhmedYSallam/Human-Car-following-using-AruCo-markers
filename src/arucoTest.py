@@ -1,11 +1,7 @@
+#THIS CODE IS FOR TESTING NOT INCLUDING THE ARDUINO SERIAL COMMUNICATION IMPLEMENTATION
 import numpy as np
 import cv2
 import arucoDetector as det
-import serial,time
-
-serialcomm = serial.Serial('COM3', 115200, )
-serialcomm.timeout = 0.1
-time.sleep(1)
 
 calib_data_path = "../calib_data/MultiMatrix.npz"
 calib_data = np.load(calib_data_path)
@@ -29,16 +25,13 @@ def main():
         [center, topLeft, topRight, botRight, botLeft] = det.displayAruco(img, corners, ids, rejected, aruco_type)
         distance = det.distanceNpose_estimation(img, center[0], center[1], markerSize, 
                                                 det.aruco_lib[aruco_type], camMatrix, distCoef)
-        dis = str(distance)
-        print("from python: " + dis)
-        serialcomm.write(dis.encode())
-        print(serialcomm.readline().decode('ascii'))
+        string = str(distance)
+        print("distance: " + string)
         cv2.imshow("image", img)
 
         #by pressing Esc key you can close the program
         if(cv2.waitKey(1)&0xFF==27):
             break
-    serialcomm.close()
     cap.release()
     cv2.destroyAllWindows()
     

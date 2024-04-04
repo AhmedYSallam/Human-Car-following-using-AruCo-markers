@@ -69,8 +69,26 @@ def displayAruco(img, corners, ids, rejected, aruco_type):
 
 			#Printing name on screen of aruco marker type and ID
             string = "{} ID: {}".format(aruco_type, ID)
-            cv2.putText(img, string,(cx, cy+100), 
-                        cv2.FONT_HERSHEY_SIMPLEX,
-						0.5, (0, 255, 0), 2)
-            print("[Inference] ArUco marker ID: {}".format(ID))
+            cv2.putText(img, string,(cx, cy+100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            #print("[Inference] ArUco marker ID: {}".format(ID))
     return [(cx, cy), topLeft, topRight, botRight, botLeft]
+
+def distanceNpose_estimation(img, cx, cy, markerSize, aruco_type, matrix_coefficients, distortion_coefficients):
+    cv2.aruco_dict = cv2.aruco.Dictionary_get(aruco_type)
+    parameters = cv2.aruco.DetectorParameters_create()
+    distance = 0
+    corners, ids, rejected_img_points = cv2.aruco.detectMarkers(img, cv2.aruco_dict,parameters=parameters,
+        cameraMatrix=matrix_coefficients,
+        distCoeff=distortion_coefficients)
+
+    if corners:
+        for i in range(0, len(ids)):
+            rvec, tvec, points = cv2.aruco.estimatePoseSingleMarkers(corners[i], markerSize, matrix_coefficients,distortion_coefficients)
+            cv2.aruco.drawAxis(img, matrix_coefficients, distortion_coefficients, rvec, tvec, 7)  
+
+            distance = round(tvec[i][0][2], 2)
+            #print("Distance: " + str(distance))
+
+            String = "Distance: {}".format(distance)
+            cv2.putText(img, String,(cx, cy-100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    return distance
