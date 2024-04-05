@@ -20,13 +20,20 @@ def main():
     cap = cv2.VideoCapture(0)
     while (1):
         ret, img = cap.read()
+        img = cv2.resize(img, (640,480), interpolation= cv2.INTER_LINEAR)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         [corners, ids, rejected] = det.detectAruco(img, aruco_type)
         [center, topLeft, topRight, botRight, botLeft] = det.displayAruco(img, corners, ids, rejected, aruco_type)
         distance = det.distanceNpose_estimation(img, center[0], center[1], markerSize, 
                                                 det.aruco_lib[aruco_type], camMatrix, distCoef)
+        
+        #Distance between camera and arucoMarker (For translation of robot)
         string = str(distance)
         print("distance: " + string)
+        #Center position of the Aruco marker (For rotation of robot)
+        print("Center position:")
+        print("X:{}, Y{}".format(center[0], center[1]))
+
         cv2.imshow("image", img)
 
         #by pressing Esc key you can close the program
