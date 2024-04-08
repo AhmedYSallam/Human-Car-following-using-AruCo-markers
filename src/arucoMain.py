@@ -3,11 +3,11 @@ import cv2
 import arucoDetector as det
 import serial,time
 
-serialcomm = serial.Serial('COM3', 115200, )
-serialcomm.timeout = 0.1
+serialcomm = serial.Serial('COM5', 115200)
+serialcomm.timeout = 3
 time.sleep(1)
 
-calib_data_path = "../calib_data/MultiMatrix.npz"
+calib_data_path = "calib_data/MultiMatrix.npz"
 calib_data = np.load(calib_data_path)
 print(calib_data.files)
 camMatrix = calib_data["camMatrix"]
@@ -21,7 +21,7 @@ def main():
 
     aruco_type = "DICT_7X7_250"
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     while (1):
         ret, img = cap.read()
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -29,10 +29,10 @@ def main():
         [center, topLeft, topRight, botRight, botLeft] = det.displayAruco(img, corners, ids, rejected, aruco_type)
         distance = det.distanceNpose_estimation(img, center[0], center[1], markerSize, 
                                                 det.aruco_lib[aruco_type], camMatrix, distCoef)
-        dis = str(distance)
+        dis = str((distance))
         print("from python: " + dis)
-        serialcomm.write(dis.encode())
-        print(serialcomm.readline().decode('ascii'))
+        serialcomm.write((bytes(dis, 'utf-8')))
+        print(serialcomm.readline().decode('utf-8').rstrip())
         cv2.imshow("image", img)
 
         #by pressing Esc key you can close the program
