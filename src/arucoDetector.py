@@ -92,3 +92,23 @@ def distanceNpose_estimation(img, cx, cy, markerSize, aruco_type, matrix_coeffic
             String = "Distance: {}".format(distance)
             cv2.putText(img, String,(cx, cy-100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     return distance
+
+def trackingAngle(center):
+    center_angle = 90
+    min_angle = 0
+    max_angle = 180
+    x = center[0]
+    center_x = 640 / 2
+    if x<(center_x+100) and x>(center_x-100):
+        servo_angle = 90
+    elif x < center_x:
+        # Marker is on the left side of the screen
+        servo_angle = (x / center_x) * (center_angle - min_angle) + min_angle
+    else:
+        # Marker is on the right side of the screen
+        servo_angle = ((x - center_x) / (640 - center_x)) * (max_angle - center_angle) + center_angle
+    if(servo_angle>=180):
+        servo_angle = 180
+    if(servo_angle<=0):
+        servo_angle = 0
+    return servo_angle

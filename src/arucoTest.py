@@ -28,12 +28,12 @@ def main():
                                                 det.aruco_lib[aruco_type], camMatrix, distCoef)
         
         #Distance between camera and arucoMarker (For translation of robot)
-        string = str(distance)
+        """ string = str(distance)
         print("distance: " + string)
         #Center position of the Aruco marker (For rotation of robot)
         print("Center position:")
-        print("X:{}, Y{}".format(center[0], center[1]))
-
+        print("X:{}, Y{}".format(center[0], center[1])) """
+        print(det.trackingAngle(center))
         cv2.imshow("image", img)
 
         #by pressing Esc key you can close the program
