@@ -107,8 +107,8 @@ def trackingAngle(center):
     else:
         # Marker is on the right side of the screen
         servo_angle = ((x - center_x) / (640 - center_x)) * (max_angle - center_angle) + center_angle
-    if(servo_angle>=180):
-        servo_angle = 180
-    if(servo_angle<=0):
-        servo_angle = 0
+    if(servo_angle>=max_angle):
+        servo_angle = max_angle
+    if(servo_angle<=min_angle):
+        servo_angle = min_angle
     return servo_angle
